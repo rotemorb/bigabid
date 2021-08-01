@@ -98,7 +98,7 @@ async function run(numberOfCampaigns, minBPS, maxBPS) {
     });
 
     await resolveBids(now);
-   //  redisClient.zrange(REDIS_KEYS.LIST_OF_BIDS, 0, 100, 'WITHSCORES', redis.print);
+    // redisClient.zrange(REDIS_KEYS.LIST_OF_BIDS, 0, 100, 'WITHSCORES', redis.print);
     /*     redisClient.zrange(REDIS_KEYS.LIST_OF_BIDS, 0, 10, (err, result) =>
     {
       try
@@ -111,10 +111,10 @@ async function run(numberOfCampaigns, minBPS, maxBPS) {
       }
     }); */
 
-    // redisClient.smembers(REDIS_KEYS.LIST_OF_CAMPAIGNS, redis.print);
+   //redisClient.smembers(REDIS_KEYS.LIST_OF_CAMPAIGNS, redis.print);
 
     // redisClient.zscore(REDIS_KEYS.LIST_OF_BIDS, '01435a46-9e97-4255-93e1-6607d3e1394d', redis.print);
-     // redisClient.get('f40b3890-4980-466a-845d-3f4a9e4411f3', redis.print);
+      //redisClient.get('f0602a71-8eb0-4726-9bb0-4a20abafbeb4', redis.print);
     await Promise.delay(moment.duration(1, "second").asMilliseconds());
   }
 }

@@ -92,9 +92,9 @@ export default {
           return bid.campaign === this.selected;
         });
     },
-    getBidDataById()
+    getBidDataById() //TODO: pass bidID as parameter
     {
-      return JSON.parse('{ "price": 50, "campaign": "jade_beaver", "status": 1 }'); // TODO: redisClient.get()
+      return JSON.parse('{ "price": 50, "campaign": "jade_beaver", "status": 1 }'); // TODO:  Api.getBidById(bidId);
     },
     getSelectedCampaign(e)
     {
@@ -102,6 +102,18 @@ export default {
       {
         this.selected = e.target.options[e.target.options.selectedIndex].text;
       }
+      this.setAllBIds();
+    },
+    setAllBIds()
+    {
+      Promise.resolve(this.getBids()).then((res) =>
+      {
+        res.forEach(bid =>
+        {
+          this.updatedBids = bid;
+        });
+        this.getBidsData();
+      });
     }
   },
   mounted()
@@ -124,20 +136,20 @@ export default {
 
     // Sets dropdown selected option
     this.selected = this.options[0];
-
-
-    setInterval(() =>
-    {
-      Promise.resolve(this.getBids()).then((res) =>
-      {
-        res.forEach(bid =>
+    this.setAllBIds();
+    /* 
+        setInterval(() =>
         {
-          this.updatedBids = bid;
-        });
-        this.getBidsData();
-      });
-
-    }, 3000);
+          Promise.resolve(this.getBids()).then((res) =>
+          {
+            res.forEach(bid =>
+            {
+              this.updatedBids = bid;
+            });
+            this.getBidsData();
+          });
+    
+        }, 3000); */
   }
 };
 </script>

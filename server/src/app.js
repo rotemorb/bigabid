@@ -9,15 +9,18 @@ app.use(morgan("combined"));
 app.use(bodyParser.json());
 app.use(cors());
 
-app.post("/getBidById", (req, res) => {
-  try {
-    redisClient.get("01435a46-9e97-4255-93e1-6607d3e1394d", (err, data) => {
+app.get("/getBidById", (req, res) => {
+  try
+  {
+    console.log(req.params);
+    redisClient.get("1e750996-37d0-4889-9bbc-43b7780ab973", (err, data) => {
       if (err) {
         console.error(err);
         throw err;
       }
 
-      if (data) {
+      if (data)
+      {
         res.status(200).send(JSON.parse(data));
       }
     });

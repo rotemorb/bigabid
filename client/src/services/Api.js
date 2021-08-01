@@ -6,10 +6,7 @@ const funcs = {
   {
     try 
     {
-      let res = axios.post(`${BASE_URL}/getBidById`,
-      {
-        bidId,
-      });
+      let res = axios.get(`${BASE_URL}/getBidById/${bidId}`);
 
       let bid = await Promise.resolve(res).then((result) => 
       {
