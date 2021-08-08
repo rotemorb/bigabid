@@ -6,16 +6,17 @@ const funcs = {
   {
     try 
     {
-      let res = axios.get(`${BASE_URL}/getBidById/${bidId}`);
-
-      let bid = await Promise.resolve(res).then((result) => 
+      let res = axios.get(`${BASE_URL}/getBidById?bidId=${bidId}`);
+      let bid = {};
+      
+      await Promise.resolve(res).then((result) => 
       {
         if (result.status == 200) 
         {
-          return result.data;
+          bid = result.data;
         }
       });
-
+      
       return bid;
     }
     catch (err)

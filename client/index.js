@@ -64,14 +64,13 @@ function createBids(numberOfBids, campaigns) {
 
 async function resolveBids(now) {
   const bids = bidsToResolve[now];
-  
+
   if (!bids) {
     return;
   }
-
+   
   await Promise.map(Object.entries(bids), async ([bidId, bid]) => {
     bid.status = _.random(1, STATUS.WIN);
-
     await redisClient.setAsync(bidId, JSON.stringify(bid));
   });
 
@@ -114,7 +113,7 @@ async function run(numberOfCampaigns, minBPS, maxBPS) {
    //redisClient.smembers(REDIS_KEYS.LIST_OF_CAMPAIGNS, redis.print);
 
     // redisClient.zscore(REDIS_KEYS.LIST_OF_BIDS, '01435a46-9e97-4255-93e1-6607d3e1394d', redis.print);
-      //redisClient.get('f0602a71-8eb0-4726-9bb0-4a20abafbeb4', redis.print);
+    //redisClient.get('1e750996-37d0-4889-9bbc-43b7780ab973', redis.print);
     await Promise.delay(moment.duration(1, "second").asMilliseconds());
   }
 }

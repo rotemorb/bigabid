@@ -7,29 +7,28 @@
       </option>
     </select>
     <pending-bids id="pending" :bidsFinalData="bidsFinalData"></pending-bids>
-    <resolved-bids id="resolved"></resolved-bids>
   </div>
 </template>
 
 <script>
 import PendingBids from './components/PendingBids.vue';
-import ResolvedBids from './components/ResolvedBids.vue';
 import Api from './services/Api';
 
 export default {
   data()
   {
     return {
+      loading: true,
       selected: '1',
       options: [],
       bids: [],
+      bidsIntermittentData: [],
       bidsFinalData: []
     };
   },
   components:
   {
-    PendingBids,
-    ResolvedBids
+    PendingBids
   },
   computed:
   {
@@ -54,10 +53,59 @@ export default {
       {
         return this.options.push(option);
       }
+    },
+    selectedCampaign:
+    {
+      get()
+      {
+        return this.selected;
+      },
+      set(campaign)
+      {
+        return this.selected = campaign;
+      }
     }
-
   },
   methods: {
+
+    async getBidsData()
+    {
+      this.bidsIntermittentData.length = 0;
+
+      for (let i = 0; i < this.updatedBids.length; i++)
+      {
+        if (i % 2 === 0)
+        {
+          let bidJSON = {};
+
+          await this.getBidDataById(this.updatedBids[i]).then(res =>
+          {
+            bidJSON = res;
+            const bidData = {
+              bidId: this.updatedBids[i],
+              bidTime: this.updatedBids[i + 1],
+              bidPrice: bidJSON.price,
+              campaign: bidJSON.campaign,
+              status: bidJSON.status
+            };
+            this.bidsIntermittentData.push(bidData);
+          });
+        }
+      }
+    },
+    getBidDataById(bidId)
+    {
+      return Api.getBidById(bidId);
+    },
+    getSelectedCampaign(e)
+    {
+      if (e.target.options.selectedIndex > -1)
+      {
+        this.selectedCampaign = e.target.options[e.target.options.selectedIndex].text;
+      }
+
+      this.bidsFinalData = Array.from(this.bidsIntermittentData).filter(bid => bid.campaign === this.selectedCampaign);
+    },
     async getBids()
     {
       let bidsData = [];
@@ -68,51 +116,16 @@ export default {
 
       return bidsData;
     },
-    getBidsData()
+    async resolveAllBids()
     {
-      for (let i = 0; i < this.updatedBids.length; i++)
-      {
-        if (i % 2 === 0)
-        {
-          const bidJSON = this.getBidDataById(this.updatedBids[i]);
-          const bidData = {
-            bidId: this.updatedBids[i],
-            bidTime: this.updatedBids[i + 1],
-            bidPrice: bidJSON.price,
-            campaign: bidJSON.campaign,
-            status: bidJSON.status
-          };
-          this.bidsFinalData.push(bidData);
-        }
-      }
-      console.log(this.selected);
-      this.bidsFinalData = [...new Map(this.bidsFinalData.map(item =>
-        [item.bidId, item])).values()].filter(bid =>
-        {
-          return bid.campaign === this.selected;
-        });
-    },
-    getBidDataById() //TODO: pass bidID as parameter
-    {
-      return JSON.parse('{ "price": 50, "campaign": "jade_beaver", "status": 1 }'); // TODO:  Api.getBidById(bidId);
-    },
-    getSelectedCampaign(e)
-    {
-      if (e.target.options.selectedIndex > -1)
-      {
-        this.selected = e.target.options[e.target.options.selectedIndex].text;
-      }
-      this.setAllBIds();
-    },
-    setAllBIds()
-    {
-      Promise.resolve(this.getBids()).then((res) =>
+      this.updatedBids.length = 0; //Initialize this.updatedBids, to clear the bids table
+      await Promise.resolve(this.getBids()).then((res) =>
       {
         res.forEach(bid =>
         {
           this.updatedBids = bid;
         });
-        this.getBidsData();
+
       });
     }
   },
@@ -121,9 +134,8 @@ export default {
     // Set dropdown campaings
     Api.getAllCampaigns().then(campaigns =>
     {
-
       let value = 0;
-      campaigns.forEach(campaign =>
+      campaigns.sort().forEach(campaign =>
       {
         let campaignData = {
           value,
@@ -132,24 +144,16 @@ export default {
         this.updateOptions = campaignData;
         value++;
       });
-    });
-
-    // Sets dropdown selected option
-    this.selected = this.options[0];
-    this.setAllBIds();
-    /* 
-        setInterval(() =>
+      // Sets dropdown selected option
+      this.selectedCampaign = this.options[0].text;
+      this.resolveAllBids().then(() =>
+      {
+        this.getBidsData().then(() =>
         {
-          Promise.resolve(this.getBids()).then((res) =>
-          {
-            res.forEach(bid =>
-            {
-              this.updatedBids = bid;
-            });
-            this.getBidsData();
-          });
-    
-        }, 3000); */
+          this.bidsFinalData = Array.from(this.bidsIntermittentData).filter(bid => bid.campaign === this.selectedCampaign);
+        });
+      });
+    });
   }
 };
 </script>

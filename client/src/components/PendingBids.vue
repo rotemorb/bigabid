@@ -7,6 +7,8 @@
           <th>Bid Id</th>
           <th>Bid Time</th>
           <th>Price</th>
+          <th>campaign Id</th>
+          <th>Status</th>
         </tr>
       </thead>
       <tbody>
@@ -14,6 +16,7 @@
           <th>{{ bid.bidId }}</th>
           <th>{{ bid.bidTime }}</th>
           <th>{{ bid.bidPrice }}</th>
+          <th>{{ bid.campaign }}</th>
           <th>{{ bid.status }}</th>
         </tr>
       </tbody>
