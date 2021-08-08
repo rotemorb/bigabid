@@ -1,6 +1,6 @@
 Purpose:
 
-Load bids into a Redis DB, and then display those bids upon selecting a related campaign from a Dropdown. Once a bid is resolved by the 
+Load bids into a Redis DB, and then display those bids upon selecting a related campaign from a Dropdown. Once a bid is resolved by the Seeder, UI should display it with the appropriate status.
 This project Has 3 parts:
 
 Seeder: Seeds bids into Redis DB
