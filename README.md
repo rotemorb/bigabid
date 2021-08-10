@@ -12,7 +12,7 @@ Server: Coomunicate with the Redis DB using redisClient and returns the bids/cam
 
 
 In order to run the project:
-- Browse here https://github.com/dmajkic/redis/downloads and download Redis Stable (6.*)
+- Browse here https://github.com/dmajkic/redis/downloads and download Redis
 - Once downloaded, browse to the 64bit folder, and run redis-server. The server should now run locally.
 - First run "npm install" to install the packages in package.json.
 
