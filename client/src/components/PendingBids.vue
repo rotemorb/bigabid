@@ -15,7 +15,7 @@
         <tr v-for="(bid, index) in bidsFinalData" :key="index">
           <th>{{ bid.bidId }}</th>
           <th>{{ bid.bidTime }}</th>
-          <th>{{ bid.bidPrice }}</th>
+          <th>{{ bid.price }}</th>
           <th>{{ bid.campaign }}</th>
           <th>{{ bid.status }}</th>
         </tr>

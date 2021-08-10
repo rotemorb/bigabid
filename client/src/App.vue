@@ -71,31 +71,29 @@ export default {
     async getBidsData()
     {
       this.bidsIntermittentData.length = 0;
-
+      let bidsId = {
+        bids: []
+      };
+      //update bidIds to be used in next loop
       for (let i = 0; i < this.updatedBids.length; i++)
       {
+        //Only iterate on even values, since odd values hold the 
+        //unix timestamp and we want the bidId iteself
         if (i % 2 === 0)
         {
-          let bidJSON = {};
-
-          await this.getBidDataById(this.updatedBids[i]).then(res =>
-          {
-            bidJSON = res;
-            const bidData = {
-              bidId: this.updatedBids[i],
-              bidTime: this.updatedBids[i + 1],
-              bidPrice: bidJSON.price,
-              campaign: bidJSON.campaign,
-              status: bidJSON.status
-            };
-            this.bidsIntermittentData.push(bidData);
+          bidsId.bids.push({
+            'bidId': this.updatedBids[i],
+            'bidTime': this.updatedBids[i + 1],
           });
         }
       }
-    },
-    getBidDataById(bidId)
-    {
-      return Api.getBidById(bidId);
+
+      //Push all returnd data to bidsData array
+
+      await Api.getBidsData(bidsId).then(data => //JSON.stringify(bidsId)
+      {
+        this.bidsIntermittentData.push(...data);
+      });
     },
     getSelectedCampaign(e)
     {
