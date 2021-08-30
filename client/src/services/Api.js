@@ -72,7 +72,7 @@ const funcs = {
   {
     try 
     {
-      const response = await axios.post(`${BASE_URL}/getAllBids`);
+      const response = await axios.get(`${BASE_URL}/bids`);
       return response.data;
     }
     catch (err)
@@ -84,7 +84,7 @@ const funcs = {
   {
     try 
     {
-      const response = await axios.post(`${BASE_URL}/getAllCampaigns`);
+      const response = await axios.get(`${BASE_URL}/campaigns`);
       return response.data;
     }
     catch (err)
@@ -95,3 +95,4 @@ const funcs = {
 };
 
 export default funcs;
+

@@ -13,6 +13,7 @@
     "core-js": "^3.6.5",
     "lodash": "^4.17.21",
     "moment": "^2.29.1",
+    "nodejs": "^0.0.0",
     "unique-names-generator": "^4.6.0",
     "uuid": "^3.4.0",
     "vue": "^2.6.11"

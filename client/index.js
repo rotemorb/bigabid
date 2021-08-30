@@ -131,3 +131,8 @@ run(parseInt(numberOfCampaigns), parseInt(minBPS), parseInt(maxBPS)).catch(
     console.error(`Failed seeding: ${err}`);
   }
 );
+
+
+[1, 2, 3, 4].map(function(n){
+    return Math.pow(n, 2)
+}).reduce((a, b) => a + b, 0)

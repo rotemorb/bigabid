@@ -5,6 +5,8 @@ const cors = require("cors");
 const morgan = require("morgan");
 const redis = require("redis");
 const redisClient = Promise.promisifyAll(redis.createClient());
+
+
 const app = express();
 app.use(morgan("combined"));
 app.use(cors());
@@ -42,9 +44,10 @@ async function getBidData(bidID, bidTime)
   {
     if (data)
     {
-      bidData = data;
-      bidData.ddd = bidTime; //add time to bid, to be sent back in the same object
-      console.log(bidData);
+      let bidDataObj = JSON.parse(data);
+      bidDataObj.bidId = bidID;
+      bidDataObj.bidTime = bidTime;
+      bidData = JSON.stringify(bidDataObj);  
     }
   })
 
@@ -70,7 +73,7 @@ app.get("/getBidById", (req, res) => {
   }
 });
 
-app.post("/getAllBids", (req, res) => {
+app.get("/bids", (req, res) => {
   try {
     redisClient.zrange("LIST_OF_BIDS", 0, 2000, "WITHSCORES", (err, data) => {
       if (err) {
@@ -88,7 +91,7 @@ app.post("/getAllBids", (req, res) => {
   }
 });
 
-app.post("/getAllCampaigns", (req, res) => {
+app.get("/campaigns", (req, res) => {
   try {
     redisClient.smembers('LIST_OF_CAMPAIGNS', (err, data) => {
       if (err) {
